@@ -107,7 +107,7 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
 
             $this->validateGenericNode(
                 $value,
-                $previousObject,
+                !\is_scalar($value) ? $value : $previousValue,
                 \is_object($value) ? spl_object_hash($value) : null,
                 $metadata,
                 $this->defaultPropertyPath,
@@ -574,15 +574,15 @@ class RecursiveContextualValidator implements ContextualValidatorInterface
      *
      * @see TraversalStrategy
      */
-    private function validateGenericNode($value, ?object $object, ?string $cacheKey, ?MetadataInterface $metadata, string $propertyPath, array $groups, ?array $cascadedGroups, int $traversalStrategy, ExecutionContextInterface $context)
+    private function validateGenericNode($value, $parentValue, ?string $cacheKey, ?MetadataInterface $metadata, string $propertyPath, array $groups, ?array $cascadedGroups, int $traversalStrategy, ExecutionContextInterface $context)
     {
-        $context->setNode($value, $object, $metadata, $propertyPath);
+        $context->setNode($value, $parentValue, $metadata, $propertyPath);
 
         foreach ($groups as $key => $group) {
             if ($group instanceof GroupSequence) {
                 $this->stepThroughGroupSequence(
                      $value,
-                     $object,
+                     $parentValue,
                      $cacheKey,
                      $metadata,
                      $propertyPath,

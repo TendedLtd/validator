@@ -78,7 +78,7 @@ class ExecutionContext implements ExecutionContextInterface
      *
      * @var object|null
      */
-    private $object;
+    private $parentValue;
 
     /**
      * The property path leading to the current value.
@@ -146,10 +146,10 @@ class ExecutionContext implements ExecutionContextInterface
     /**
      * {@inheritdoc}
      */
-    public function setNode($value, ?object $object, MetadataInterface $metadata = null, string $propertyPath)
+    public function setNode($value, $parentValue, MetadataInterface $metadata = null, string $propertyPath)
     {
         $this->value = $value;
-        $this->object = $object;
+        $this->parentValue = $parentValue;
         $this->metadata = $metadata;
         $this->propertyPath = (string) $propertyPath;
     }
@@ -247,7 +247,7 @@ class ExecutionContext implements ExecutionContextInterface
      */
     public function getObject()
     {
-        return $this->object;
+        return $this->parentValue;
     }
 
     /**
